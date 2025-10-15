@@ -1,4 +1,4 @@
-package dev.alkha.dicodingevent.ui
+package dev.alkha.dicodingevent.ui.event
 
 import android.content.Intent
 import android.view.LayoutInflater
