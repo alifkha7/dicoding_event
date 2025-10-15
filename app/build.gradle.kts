@@ -63,4 +63,8 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
+
+    // KTX
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
 }
