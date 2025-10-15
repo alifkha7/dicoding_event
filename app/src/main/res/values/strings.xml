@@ -12,4 +12,7 @@
         <item quantity="one">%d remaining quota</item>
         <item quantity="other">%d remaining quotas</item>
     </plurals>
+    <string name="home">Home</string>
+    <string name="upcoming_events">Upcoming Events</string>
+    <string name="finished_events">Finished Events</string>
 </resources>
