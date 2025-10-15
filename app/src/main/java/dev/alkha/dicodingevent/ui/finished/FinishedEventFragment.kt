@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import dev.alkha.dicodingevent.ui.EventAdapter
+import dev.alkha.dicodingevent.R
 import dev.alkha.dicodingevent.databinding.FragmentFinishedEventBinding
+import dev.alkha.dicodingevent.ui.EventAdapter
 import dev.alkha.dicodingevent.ui.UiState
 import kotlinx.coroutines.launch
 
@@ -38,19 +39,38 @@ class FinishedEventFragment : Fragment() {
         adapter = EventAdapter()
         binding.rvEvent.layoutManager = LinearLayoutManager(requireActivity())
         binding.rvEvent.adapter = adapter
+        with(binding) {
+            searchView.setupWithSearchBar(searchBar)
+            searchView.editText.setOnEditorActionListener { textView, actionId, event ->
+                searchBar.setText(searchView.text)
+                searchView.hide()
+                if (searchView.text.isNotEmpty()) {
+                    viewModel.searchEvents(searchView.text.toString())
+                } else {
+                    viewModel.getFinishedEvents()
+                }
+                false
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collect {
-                when (it) {
+            viewModel.uiState.collect { uiState ->
+                when (uiState) {
                     is UiState.Loading -> {
                         showLoading(true)
                         showError(false)
                     }
+
                     is UiState.Success -> {
                         showLoading(false)
                         showError(false)
-                        adapter.submitList(it.data)
+                        adapter.submitList(uiState.data)
+                        if (uiState.data.isEmpty()) {
+                            showError(true)
+                            binding.tvError.text = getString(R.string.empty_data)
+                        }
                     }
+
                     is UiState.Error -> {
                         showLoading(false)
                         showError(true)

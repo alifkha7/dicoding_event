@@ -15,4 +15,6 @@
     <string name="home">Home</string>
     <string name="upcoming_events">Upcoming Events</string>
     <string name="finished_events">Finished Events</string>
+    <string name="search_event">Search event</string>
+    <string name="empty_data">Event not found</string>
 </resources>

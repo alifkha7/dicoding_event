@@ -9,20 +9,33 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class FinishedEventViewModel : ViewModel() {
+class FinishedEventViewModel() : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UiState<List<EventItem>>>(UiState.Loading)
-    val uiState: StateFlow<UiState<List<EventItem>>> = _uiState
+    private val _uiState: MutableStateFlow<UiState<List<EventItem>>> =
+        MutableStateFlow(UiState.Loading)
+    val uiState: StateFlow<UiState<List<EventItem>>> get() = _uiState
 
     init {
         getFinishedEvents()
     }
 
-    private fun getFinishedEvents() {
+    fun getFinishedEvents() {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
             try {
                 val response = ApiConfig.getApiService().getEvents(0)
+                _uiState.value = UiState.Success(response.listEvents)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message.toString())
+            }
+        }
+    }
+
+    fun searchEvents(query: String) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val response = ApiConfig.getApiService().searchEvents(query)
                 _uiState.value = UiState.Success(response.listEvents)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e.message.toString())
