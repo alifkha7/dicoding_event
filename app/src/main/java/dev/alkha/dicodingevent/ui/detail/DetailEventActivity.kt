@@ -4,23 +4,28 @@ import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import dev.alkha.dicodingevent.R
+import dev.alkha.dicodingevent.data.Resource
+import dev.alkha.dicodingevent.data.remote.response.DetailEventResponse
 import dev.alkha.dicodingevent.data.remote.response.EventItem
 import dev.alkha.dicodingevent.databinding.ActivityDetailEventBinding
-import dev.alkha.dicodingevent.ui.UiState
+import dev.alkha.dicodingevent.ui.ViewModelFactory
+import dev.alkha.dicodingevent.ui.event.EventViewModel
 import dev.alkha.dicodingevent.utils.DateFormatter.formatDate
 import kotlinx.coroutines.launch
 
 class DetailEventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailEventBinding
-    private lateinit var viewModel: DetailEventViewModel
+    private val viewModel: EventViewModel by viewModels {
+        ViewModelFactory.getInstance(this)
+    }
 
     companion object {
         const val EXTRA_ID = "extra_id"
@@ -31,32 +36,31 @@ class DetailEventActivity : AppCompatActivity() {
         binding = ActivityDetailEventBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this)[DetailEventViewModel::class.java]
-
         val eventId = intent.getIntExtra(EXTRA_ID, -1)
-        if (eventId != -1) {
-            viewModel.getDetailEvent(eventId)
-        }
 
         lifecycleScope.launch {
-            viewModel.uiState.collect {
-                when (it) {
-                    is UiState.Loading -> {
-                        showLoading(true)
-                        showError(false)
-                    }
+            viewModel.getEventDetail(eventId).collect { resource ->
+                handleResource(resource)
+            }
+        }
+    }
 
-                    is UiState.Success -> {
-                        showLoading(false)
-                        showError(false)
-                        populateEventDetails(it.data)
-                    }
+    private fun handleResource(resource: Resource<DetailEventResponse>) {
+        when (resource) {
+            is Resource.Loading -> {
+                showLoading(true)
+                showError(false)
+            }
 
-                    is UiState.Error -> {
-                        showLoading(false)
-                        showError(true)
-                    }
-                }
+            is Resource.Success -> {
+                showLoading(false)
+                showError(false)
+                populateEventDetails(resource.data.event)
+            }
+
+            is Resource.Error -> {
+                showLoading(false)
+                showError(true)
             }
         }
     }
