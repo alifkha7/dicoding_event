@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import dev.alkha.dicodingevent.data.Resource
+import dev.alkha.dicodingevent.data.remote.response.EventResponse
 import dev.alkha.dicodingevent.databinding.FragmentHomeBinding
-import dev.alkha.dicodingevent.ui.EventAdapter
-import dev.alkha.dicodingevent.ui.UiState
+import dev.alkha.dicodingevent.ui.ViewModelFactory
+import dev.alkha.dicodingevent.ui.event.EventAdapter
+import dev.alkha.dicodingevent.ui.event.EventViewModel
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -17,7 +20,9 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: HomeViewModel
+    private val viewModel: EventViewModel by viewModels {
+        ViewModelFactory.getInstance(requireActivity())
+    }
     private lateinit var upcomingEventAdapter: UpcomingEventAdapter
     private lateinit var finishedEventAdapter: EventAdapter
 
@@ -32,8 +37,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-
         setupRecyclerViews()
         observeViewModel()
     }
@@ -47,49 +50,41 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.upcomingEventsState.collect {
-                when (it) {
-                    is UiState.Loading -> {
-                        showLoading(true)
-                        showError(false)
-                    }
-
-                    is UiState.Success -> {
-                        showLoading(false)
-                        showError(false)
-                        binding.tvUpcomingEventsTitle.visibility = View.VISIBLE
-                        upcomingEventAdapter.submitList(it.data)
-                    }
-
-                    is UiState.Error -> {
-                        showLoading(false)
-                        showError(true)
-                    }
-                }
+        lifecycleScope.launch {
+            viewModel.getEvents(1).collect { uiState ->
+                handleUiState(uiState, true)
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.finishedEventsState.collect {
-                when (it) {
-                    is UiState.Loading -> {
-                        showLoading(true)
-                        showError(false)
-                    }
+        lifecycleScope.launch {
+            viewModel.getEvents(0).collect { uiState ->
+                handleUiState(uiState, false)
+            }
+        }
+    }
 
-                    is UiState.Success -> {
-                        showLoading(false)
-                        showError(false)
-                        binding.tvFinishedEventsTitle.visibility = View.VISIBLE
-                        finishedEventAdapter.submitList(it.data)
-                    }
+    private fun handleUiState(uiState: Resource<EventResponse>, isUpcoming: Boolean) {
+        when (uiState) {
+            is Resource.Loading -> {
+                showLoading(true)
+                showError(false)
+            }
 
-                    is UiState.Error -> {
-                        showLoading(false)
-                        showError(true)
-                    }
+            is Resource.Success -> {
+                showLoading(false)
+                showError(false)
+                if (isUpcoming) {
+                    binding.tvUpcomingEventsTitle.visibility = View.VISIBLE
+                    upcomingEventAdapter.submitList(uiState.data.listEvents.take(5))
+                } else {
+                    binding.tvFinishedEventsTitle.visibility = View.VISIBLE
+                    finishedEventAdapter.submitList(uiState.data.listEvents.take(5))
                 }
+            }
+
+            is Resource.Error -> {
+                showLoading(false)
+                showError(true)
             }
         }
     }
