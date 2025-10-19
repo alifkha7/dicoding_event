@@ -19,4 +19,9 @@
         android:name="dev.alkha.dicodingevent.ui.finished.FinishedEventFragment"
         android:label="fragment_finished_event"
         tools:layout="@layout/fragment_finished_event" />
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="dev.alkha.dicodingevent.ui.favorite.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" />
 </navigation>
