@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources />
+<resources>
+    <!-- Light scheme -->
+    <color name="md_theme_primary">#234C6A</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+
+    <color name="md_theme_secondary">#456882</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+
+    <color name="md_theme_tertiary">#D2C1B6</color>
+    <color name="md_theme_onTertiary">#1B3C53</color>
+
+    <color name="md_theme_background">#F9F9F9</color>
+
+    <color name="md_theme_surface">#FFFFFF</color>
+    <color name="md_theme_onSurface">#1B3C53</color>
+
+    <color name="md_theme_outline">#E1E5EA</color>
+    <color name="md_theme_surfaceVariant">#F3F5F7</color>
+</resources>
