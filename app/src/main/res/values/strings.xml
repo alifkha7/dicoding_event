@@ -17,4 +17,6 @@
     <string name="finished_events">Finished Events</string>
     <string name="search_event">Search event</string>
     <string name="empty_data">Event not found</string>
+    <string name="favorite">Favorite</string>
+    <string name="no_favorite_event">No Favorite Event</string>
 </resources>
