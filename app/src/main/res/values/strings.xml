@@ -19,4 +19,7 @@
     <string name="empty_data">Event not found</string>
     <string name="favorite">Favorite</string>
     <string name="no_favorite_event">No Favorite Event</string>
+    <string name="setting">Setting</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="enable_dark_mode">Enable dark mode</string>
 </resources>
