@@ -24,7 +24,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                app:title="Setting" />
+                app:title="@string/setting" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -64,6 +64,33 @@
                 app:layout_constraintBottom_toBottomOf="@+id/tv_enable_dark_mode"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tv_dark_mode" />
+
+            <TextView
+                android:id="@+id/tv_daily_reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/daily_reminder"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_enable_dark_mode" />
+
+            <TextView
+                android:id="@+id/tv_enable_daily_reminder"
+                style="@style/TextAppearance.Material3.LabelSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/enable_notification"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_daily_reminder" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switch_daily_reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_enable_daily_reminder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_daily_reminder" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
