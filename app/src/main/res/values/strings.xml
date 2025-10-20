@@ -22,4 +22,9 @@
     <string name="setting">Setting</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="enable_dark_mode">Enable dark mode</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="enable_notification">Enable notification</string>
+    <string name="notification_permission_is_required_for_this_feature">Notification permission is required for this feature</string>
+    <string name="daily_reminder_is_active">Daily reminder is active</string>
+    <string name="daily_reminder_is_not_active">Daily reminder is not active</string>
 </resources>
