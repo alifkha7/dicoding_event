@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.android.material.snackbar.Snackbar
@@ -65,8 +66,10 @@ class SettingFragment : Fragment() {
             }
         }
 
-        binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.saveThemeSetting(isChecked)
+        binding.switchTheme.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (buttonView.isPressed) {
+                viewModel.saveThemeSetting(isChecked)
+            }
         }
 
         viewModel.getDailyReminderSetting()
@@ -96,7 +99,11 @@ class SettingFragment : Fragment() {
         val workManager = WorkManager.getInstance(requireContext())
         val periodicWorkRequest =
             PeriodicWorkRequestBuilder<DailyReminderWorker>(1, TimeUnit.DAYS).build()
-        workManager.enqueue(periodicWorkRequest)
+        workManager.enqueueUniquePeriodicWork(
+            DailyReminderWorker.WORK_TAG,
+            ExistingPeriodicWorkPolicy.KEEP,
+            periodicWorkRequest
+        )
         Snackbar.make(
             binding.root,
             getString(R.string.daily_reminder_is_active), Snackbar.LENGTH_SHORT
@@ -105,7 +112,7 @@ class SettingFragment : Fragment() {
 
     private fun disableDailyReminder() {
         viewModel.saveDailyReminderSetting(false)
-        WorkManager.getInstance(requireContext()).cancelAllWork()
+        WorkManager.getInstance(requireContext()).cancelUniqueWork(DailyReminderWorker.WORK_TAG)
         Snackbar.make(
             binding.root,
             getString(R.string.daily_reminder_is_not_active), Snackbar.LENGTH_SHORT

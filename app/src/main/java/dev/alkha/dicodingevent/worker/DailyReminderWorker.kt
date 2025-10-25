@@ -26,15 +26,19 @@ class DailyReminderWorker(appContext: Context, workerParams: WorkerParameters) :
                 }
 
                 is Resource.Error -> {
-                    Log.w("DailyReminderWorker", "Failed to fetch events: ${resource.error}")
+                    Log.w(WORK_TAG, "Failed to fetch events: ${resource.error}")
                 }
 
                 is Resource.Loading -> {}
             }
             Result.success()
         } catch (e: Exception) {
-            Log.e("DailyReminderWorker", "Work failed unexpectedly", e)
+            Log.e(WORK_TAG, "Work failed unexpectedly", e)
             Result.failure()
         }
+    }
+
+    companion object {
+        const val WORK_TAG = "daily_reminder_worker"
     }
 }
