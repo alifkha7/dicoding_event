@@ -46,7 +46,7 @@ class EventAdapter : ListAdapter<EventItem, EventAdapter.EventViewHolder>(DIFF_C
                 oldItem: EventItem,
                 newItem: EventItem,
             ): Boolean {
-                return oldItem == newItem
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
