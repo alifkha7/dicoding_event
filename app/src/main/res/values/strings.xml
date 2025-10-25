@@ -27,4 +27,6 @@
     <string name="notification_permission_is_required_for_this_feature">Notification permission is required for this feature</string>
     <string name="daily_reminder_is_active">Daily reminder is active</string>
     <string name="daily_reminder_is_not_active">Daily reminder is not active</string>
+    <string name="reminder_channel_name">Dicoding Event Reminder</string>
+    <string name="recommendation_event_on">Recommendation event for you on %s</string>
 </resources>
