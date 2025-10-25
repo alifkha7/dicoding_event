@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
+import dev.alkha.dicodingevent.R
 import dev.alkha.dicodingevent.data.Resource
 import dev.alkha.dicodingevent.data.remote.response.EventResponse
 import dev.alkha.dicodingevent.databinding.FragmentHomeBinding
@@ -67,12 +69,10 @@ class HomeFragment : Fragment() {
         when (uiState) {
             is Resource.Loading -> {
                 showLoading(true)
-                showError(false)
             }
 
             is Resource.Success -> {
                 showLoading(false)
-                showError(false)
                 if (isUpcoming) {
                     binding.tvUpcomingEventsTitle.visibility = View.VISIBLE
                     upcomingEventAdapter.submitList(uiState.data.listEvents.take(5))
@@ -84,17 +84,21 @@ class HomeFragment : Fragment() {
 
             is Resource.Error -> {
                 showLoading(false)
-                showError(true)
+                showError()
             }
         }
     }
 
-    fun showLoading(isLoading: Boolean) {
+    private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    fun showError(isError: Boolean) {
-        binding.tvError.visibility = if (isError) View.VISIBLE else View.GONE
+    private fun showError() {
+        Snackbar.make(
+            binding.root,
+            getString(R.string.error_message),
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     override fun onDestroyView() {
