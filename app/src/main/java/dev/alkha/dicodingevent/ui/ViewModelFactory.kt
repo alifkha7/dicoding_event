@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dev.alkha.dicodingevent.data.EventRepository
-import dev.alkha.dicodingevent.data.Injection
+import dev.alkha.dicodingevent.di.Injection
 import dev.alkha.dicodingevent.ui.detail.DetailEventViewModel
 import dev.alkha.dicodingevent.ui.event.EventViewModel
 import dev.alkha.dicodingevent.ui.favorite.FavoriteViewModel
