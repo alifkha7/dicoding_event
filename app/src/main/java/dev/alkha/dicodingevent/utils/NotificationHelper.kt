@@ -19,7 +19,7 @@ class NotificationHelper(private val context: Context) {
     fun showUpcomingEventReminder(event: EventItem) {
         createNotificationChannel()
 
-        val formattedDate = DateFormatter.formatDate(event.beginTime) ?: event.beginTime
+        val formattedDate = DateFormatter.formatDate(event.beginTime)
         val contentText = context.getString(R.string.recommendation_event_on, formattedDate)
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
