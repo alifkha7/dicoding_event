@@ -1,79 +1,40 @@
 package dev.alkha.dicodingevent.worker
 
-import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import dev.alkha.dicodingevent.R
 import dev.alkha.dicodingevent.data.EventRepository
-import dev.alkha.dicodingevent.data.Injection
 import dev.alkha.dicodingevent.data.Resource
-import kotlinx.coroutines.flow.first
+import dev.alkha.dicodingevent.di.Injection
+import dev.alkha.dicodingevent.utils.NotificationHelper
+import kotlinx.coroutines.flow.last
 
 class DailyReminderWorker(appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {
 
     private val eventRepository: EventRepository = Injection.provideRepository(applicationContext)
+    private val notificationHelper = NotificationHelper(applicationContext)
 
     override suspend fun doWork(): Result {
         return try {
-            when (val response = eventRepository.getEvents(isActive = -1).first()) {
+            when (val resource = eventRepository.getEvents(isActive = -1).last()) {
                 is Resource.Success -> {
-                    val event = response.data.listEvents.firstOrNull()
-
-                    if (event != null) {
-                        showNotification(
-                            event.name,
-                            "Recommendation event for you on ${event.beginTime}"
-                        )
+                    resource.data.listEvents.firstOrNull()?.let { event ->
+                        notificationHelper.showUpcomingEventReminder(event)
                     }
                 }
 
-                else -> {}
-            }
+                is Resource.Error -> {
+                    Log.w("DailyReminderWorker", "Failed to fetch events: ${resource.error}")
+                }
 
+                is Resource.Loading -> {}
+            }
             Result.success()
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Log.e("DailyReminderWorker", "Work failed unexpectedly", e)
             Result.failure()
         }
-    }
-
-    private fun showNotification(title: String, description: String) {
-        val notificationManager = NotificationManagerCompat.from(applicationContext)
-        val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notifications)
-            .setContentTitle(title)
-            .setContentText(description)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        if (ActivityCompat.checkSelfPermission(
-                applicationContext,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            notificationManager.notify(NOTIFICATION_ID, notification.build())
-        }
-    }
-
-    companion object {
-        private const val CHANNEL_ID = "channel_01"
-        private const val CHANNEL_NAME = "dicoding event channel"
-        private const val NOTIFICATION_ID = 1
     }
 }
