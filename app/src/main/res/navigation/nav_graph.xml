@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="dev.alkha.dicodingevent.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/upcomingEventFragment"
+        android:name="dev.alkha.dicodingevent.ui.upcoming.UpcomingEventFragment"
+        android:label="fragment_upcoming_event"
+        tools:layout="@layout/fragment_upcoming_event" />
+    <fragment
+        android:id="@+id/finishedEventFragment"
+        android:name="dev.alkha.dicodingevent.ui.finished.FinishedEventFragment"
+        android:label="fragment_finished_event"
+        tools:layout="@layout/fragment_finished_event" />
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="dev.alkha.dicodingevent.ui.favorite.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="dev.alkha.dicodingevent.ui.setting.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
+</navigation>

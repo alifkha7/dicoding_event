@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Dicoding Event</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="finished">Finished</string>
+    <string name="event_image">Event Image</string>
+    <string name="error_message">Oops, something went wrong. Please try again later.</string>
+    <string name="app_bar_title">Dicoding Event</string>
+    <string name="app_bar_subtitle">Recommendation event for you</string>
+    <string name="register">Register</string>
+    <string name="organizer">by %s</string>
+    <plurals name="quota_remaining">
+        <item quantity="one">%d remaining quota</item>
+        <item quantity="other">%d remaining quotas</item>
+    </plurals>
+    <string name="home">Home</string>
+    <string name="upcoming_events">Upcoming Events</string>
+    <string name="finished_events">Finished Events</string>
+    <string name="search_event">Search event</string>
+    <string name="empty_data">Event not found</string>
+    <string name="favorite">Favorite</string>
+    <string name="no_favorite_event">No Favorite Event</string>
+    <string name="setting">Setting</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="enable_dark_mode">Enable dark mode</string>
+    <string name="daily_reminder">Daily Reminder</string>
+    <string name="enable_notification">Enable notification</string>
+    <string name="notification_permission_is_required_for_this_feature">Notification permission is required for this feature</string>
+    <string name="daily_reminder_is_active">Daily reminder is active</string>
+    <string name="daily_reminder_is_not_active">Daily reminder is not active</string>
+    <string name="reminder_channel_name">Dicoding Event Reminder</string>
+    <string name="recommendation_event_on">Recommendation event for you on %s</string>
 </resources>
